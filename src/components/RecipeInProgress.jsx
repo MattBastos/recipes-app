@@ -9,7 +9,7 @@ import shareIcon from '../images/shareIcon.svg';
 const copy = require('clipboard-copy');
 
 function RecipeInProgress({ path, id, mealInfo, mealIngredientsAndMeasures,
-  drinkInfo, drinkIngredientsAndMeasures /* validateFinishBtn */ }) {
+  drinkInfo, drinkIngredientsAndMeasures, setIsDisabled, setIsDisabledDrink }) {
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [copiedMsgVisibility, setCopiedMsgVisibility] = useState(false);
@@ -37,16 +37,6 @@ function RecipeInProgress({ path, id, mealInfo, mealIngredientsAndMeasures,
   useEffect(() => {
     localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
   }, [favoriteRecipes]);
-
-  /* useEffect(() => {
-    if (savedIngredients > 0) {
-      if (path.includes('meals')) {
-        validateFinishBtn(mealIngredientsAndMeasures, savedIngredients);
-      } else {
-        validateFinishBtn(drinkIngredientsAndMeasures, savedIngredients);
-      }
-    }
-  }, [savedIngredients]); */
 
   const handleFavoriteMealBtn = () => {
     setIsFavorite(!isFavorite);
@@ -135,6 +125,10 @@ function RecipeInProgress({ path, id, mealInfo, mealIngredientsAndMeasures,
             ingredient={ mealIngredient }
             savedIngredients={ savedIngredients }
             setSavedIngredients={ setSavedIngredients }
+            mealIngredientsAndMeasures={ mealIngredientsAndMeasures }
+            drinkIngredientsAndMeasures={ drinkIngredientsAndMeasures }
+            setIsDisabled={ setIsDisabled }
+            path={ path }
           />
         ))}
       </ul>
@@ -196,6 +190,7 @@ function RecipeInProgress({ path, id, mealInfo, mealIngredientsAndMeasures,
             ingredient={ drinkIngredient }
             savedIngredients={ savedIngredients }
             setSavedIngredients={ setSavedIngredients }
+            setIsDisabledDrink={ setIsDisabledDrink }
           />
         ))}
       </ul>
@@ -222,7 +217,8 @@ RecipeInProgress.propTypes = {
   mealIngredientsAndMeasures: PropTypes.arrayOf(PropTypes.string.isRequired),
   drinkInfo: PropTypes.shape(PropTypes.object.isRequired),
   drinkIngredientsAndMeasures: PropTypes.arrayOf(PropTypes.string.isRequired),
-  /* validateFinishBtn: PropTypes.func.isRequired, */
+  setIsDisabled: PropTypes.func,
+  setIsDisabledDrink: PropTypes.func,
 };
 
 RecipeInProgress.defaultProps = {
@@ -230,6 +226,8 @@ RecipeInProgress.defaultProps = {
   mealIngredientsAndMeasures: undefined,
   drinkInfo: undefined,
   drinkIngredientsAndMeasures: undefined,
+  setIsDisabled: undefined,
+  setIsDisabledDrink: undefined,
 };
 
 export default RecipeInProgress;

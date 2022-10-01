@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-function Ingredients({ testId, ingredient,
-  savedIngredients, setSavedIngredients }) {
+function Ingredients({ path, testId, ingredient,
+  savedIngredients, setSavedIngredients, setIsDisabled,
+  mealIngredientsAndMeasures, drinkIngredientsAndMeasures, setIsDisabledDrink }) {
   const [isChecked, setIsChecked] = useState(true);
+  const [checkedMealIngredients, setCheckedMealIngredients] = useState(0);
+  const [checkedDrinkIngredients, setCheckedDrinkIngredients] = useState(0);
 
   useEffect(() => {
     setIsChecked(false);
@@ -19,6 +22,55 @@ function Ingredients({ testId, ingredient,
   useEffect(() => {
     localStorage.setItem('inProgressRecipes', JSON.stringify(savedIngredients));
   }, [savedIngredients]);
+
+  useEffect(() => {
+    if (mealIngredientsAndMeasures !== undefined
+      && savedIngredients !== null) {
+      const indexOf = -1;
+      const filteredIngredients = mealIngredientsAndMeasures
+        .filter((el) => savedIngredients.indexOf(el) !== indexOf);
+      setCheckedMealIngredients(filteredIngredients.length);
+    }
+  }, [savedIngredients]);
+
+  useEffect(() => {
+    if (drinkIngredientsAndMeasures !== undefined
+      && savedIngredients !== null) {
+      const filteredIngredients = drinkIngredientsAndMeasures
+        .filter((el) => savedIngredients.indexOf(el) !== indexOf);
+      setCheckedDrinkIngredients(filteredIngredients.length);
+    }
+  }, [savedIngredients]);
+
+  const validateFinishBtn = (checked, arrayOfIngredients, route) => {
+    if (arrayOfIngredients !== null && path.includes(route)) {
+      if (checked === arrayOfIngredients.length) {
+        setIsDisabled(false);
+      } else {
+        setIsDisabled(true);
+      }
+    }
+    if (arrayOfIngredients !== null && path.includes(route)
+    && path.includes('drinks')) {
+      if (checked === arrayOfIngredients.length) {
+        setIsDisabledDrink(false);
+      } else {
+        setIsDisabledDrink(true);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (path !== undefined) {
+      validateFinishBtn(checkedMealIngredients, mealIngredientsAndMeasures, 'meals');
+    }
+  }, [checkedMealIngredients]);
+
+  useEffect(() => {
+    if (path !== undefined) {
+      validateFinishBtn(checkedDrinkIngredients, drinkIngredientsAndMeasures, 'drinks');
+    }
+  }, [checkedDrinkIngredients]);
 
   const handleIngredientsInput = () => {
     setIsChecked(!isChecked);
@@ -67,12 +119,22 @@ function Ingredients({ testId, ingredient,
 Ingredients.propTypes = {
   testId: PropTypes.number.isRequired,
   ingredient: PropTypes.string.isRequired,
+  mealIngredientsAndMeasures: PropTypes.arrayOf(PropTypes.string.isRequired),
+  drinkIngredientsAndMeasures: PropTypes.arrayOf(PropTypes.string.isRequired),
   savedIngredients: PropTypes.arrayOf(PropTypes.string.isRequired),
   setSavedIngredients: PropTypes.func.isRequired,
+  setIsDisabled: PropTypes.func,
+  setIsDisabledDrink: PropTypes.func,
+  path: PropTypes.string,
 };
 
 Ingredients.defaultProps = {
   savedIngredients: undefined,
+  mealIngredientsAndMeasures: undefined,
+  drinkIngredientsAndMeasures: undefined,
+  setIsDisabled: undefined,
+  setIsDisabledDrink: undefined,
+  path: undefined,
 };
 
 export default Ingredients;

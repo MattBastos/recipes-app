@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { fetchMealsDetails } from '../services/fetchs/fetchItemsDetails';
 import RecipeInProgress from '../components/RecipeInProgress';
 
@@ -10,6 +11,8 @@ function MealInProgress({ match: { path, params: { id } } }) {
     ingredients: [],
     measures: [],
   });
+
+  const history = useHistory();
 
   const { ingredients, measures } = mealIngredientsAndMeasures;
   const ingredientsAndMeasures = ingredients
@@ -49,12 +52,8 @@ function MealInProgress({ match: { path, params: { id } } }) {
     getMealInfo();
   }, [id]);
 
-  const validateFinishBtn = (ingredientList, savedIngredients) => {
-    if (ingredientList.length === savedIngredients.length) {
-      setIsDisabled(false);
-    } else {
-      setIsDisabled(true);
-    }
+  const handleFinishBtn = () => {
+    history.push('/done-recipes');
   };
 
   return (
@@ -64,13 +63,13 @@ function MealInProgress({ match: { path, params: { id } } }) {
         id={ id }
         mealInfo={ mealInfo }
         mealIngredientsAndMeasures={ ingredientsAndMeasures }
-        validateFinishBtn={ validateFinishBtn }
+        setIsDisabled={ setIsDisabled }
       />
       <button
         data-testid="finish-recipe-btn"
         type="button"
         disabled={ isDisabled }
-        onClick={ null }
+        onClick={ handleFinishBtn }
       >
         Finish Recipe
       </button>

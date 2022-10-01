@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { fetchDrinksDetails } from '../services/fetchs/fetchItemsDetails';
 import RecipeInProgress from '../components/RecipeInProgress';
 
 function DrinkInProgress({ match: { path, params: { id } } }) {
   const [drinkInfo, setDrinkInfo] = useState({});
+  const [isDisabledDrink, setIsDisabledDrink] = useState(true);
   const [drinkIngredientsAndMeasures, setDrinkIngredientsAndMeasures] = useState({
     ingredients: [],
     measures: [],
   });
+
+  const history = useHistory();
 
   const { ingredients, measures } = drinkIngredientsAndMeasures;
   const ingredientsAndMeasures = ingredients
@@ -48,6 +52,10 @@ function DrinkInProgress({ match: { path, params: { id } } }) {
     getMealInfo();
   }, [id]);
 
+  const handleFinishBtn = () => {
+    history.push('/done-recipes');
+  };
+
   return (
     <section>
       <RecipeInProgress
@@ -55,11 +63,13 @@ function DrinkInProgress({ match: { path, params: { id } } }) {
         id={ id }
         drinkInfo={ drinkInfo }
         drinkIngredientsAndMeasures={ ingredientsAndMeasures }
+        setIsDisabledDrink={ setIsDisabledDrink }
       />
       <button
         data-testid="finish-recipe-btn"
         type="button"
-        onClick={ null }
+        disabled={ isDisabledDrink }
+        onClick={ handleFinishBtn }
       >
         Finish Recipe
       </button>

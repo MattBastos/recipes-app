@@ -31,6 +31,14 @@ describe('Testa o componente Search Bar', () => {
 
   it('Testa o Search Bar', () => {
     renderWithRouter(<App />);
+    const emailInput = screen.getByTestId(emailInputStrg);
+    userEvent.type(emailInput, emailInputed);
+
+    const passwordInput = screen.getByTestId(passwordInputStrg);
+    userEvent.type(passwordInput, '1234567');
+
+    const loginBtn = screen.getByTestId(loginSubmitBtnStrg);
+    userEvent.click(loginBtn);
 
     const searchTopButton = screen.getByTestId(searchTopButtonStrg);
     expect(searchTopButton).toBeInTheDocument();
@@ -51,15 +59,6 @@ describe('Testa o componente Search Bar', () => {
 
   it('Testa se o Alert do FirstLetter é disparado na pagina meals', () => {
     renderWithRouter(<App />);
-
-    const emailInput = screen.getByTestId(emailInputStrg);
-    userEvent.type(emailInput, emailInputed);
-
-    const passwordInput = screen.getByTestId(passwordInputStrg);
-    userEvent.type(passwordInput, '1234567');
-
-    const loginBtn = screen.getByTestId(loginSubmitBtnStrg);
-    userEvent.click(loginBtn);
 
     const searchTopButton = screen.getByTestId(searchTopButtonStrg);
     userEvent.click(searchTopButton);
@@ -269,5 +268,9 @@ describe('Testa o componente Search Bar', () => {
 
     const cardsImages = await screen.findAllByTestId(/-recipe-card/);
     expect(cardsImages).toHaveLength(12);
+  });
+
+  it('Testa se o retorno for apenas uma receita, ela é renderizada na tela', () => {
+
   });
 });

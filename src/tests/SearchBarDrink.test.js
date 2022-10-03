@@ -16,10 +16,10 @@ const passwordInputStrg = 'password-input';
 const loginSubmitBtnStrg = 'login-submit-btn';
 const emailInputed = 'email@email.com';
 const drinkIconStrg = 'drinks-bottom-btn';
-const SEARCH_TOP_BTN = 'search-top-btn';
-const SEARCH_INPUT = 'search-input';
-const NAME_SEARCH_RADIO = 'name-search-radio';
-const EXEC_SEARCH_BTN = 'exec-search-btn';
+// const SEARCH_TOP_BTN = 'search-top-btn';
+// const SEARCH_INPUT = 'search-input';
+// const NAME_SEARCH_RADIO = 'name-search-radio';
+// const EXEC_SEARCH_BTN = 'exec-search-btn';
 
 describe('Testa o componente Search Bar', () => {
   it('Testa se o componente é renderizado na paǵina', () => {
@@ -150,28 +150,6 @@ describe('Testa o componente Search Bar', () => {
     waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
   });
 
-  it('Testa se apenas 12 cards são renderizado na pagina drinks', async () => {
-    renderWithRouter(<App />, '/drinks');
-
-    const drinkIcon = screen.getByTestId(drinkIconStrg);
-    userEvent.click(drinkIcon);
-
-    const searchTopButton = screen.getByTestId(searchTopButtonStrg);
-    userEvent.click(searchTopButton);
-
-    const inputValueFilter = screen.getByTestId(searchInputStrg);
-    userEvent.type(inputValueFilter, 'water');
-
-    const ingredienteSearchRadio = screen.getByTestId(ingredientSearchRadioStrg);
-    userEvent.click(ingredienteSearchRadio);
-
-    const execSearchBtn = screen.getByTestId(execSearchBtnStrg);
-    userEvent.click(execSearchBtn);
-
-    const cardsImages = await screen.findAllByTestId(/-recipe-card/);
-    waitFor(() => expect(cardsImages).toHaveLength(12));
-  });
-
   it('Testa se o retorno for apenas uma receita, ela é renderizada na tela drinks', async () => {
     const { history } = renderWithRouter(<App />, '/drinks/178319');
 
@@ -209,7 +187,7 @@ describe('Testa o componente Search Bar', () => {
     userEvent.click(searchTopButton);
 
     const inputValueFilter = screen.getByTestId(searchInputStrg);
-    userEvent.type(inputValueFilter, 'Water');
+    userEvent.type(inputValueFilter, 'water');
 
     const ingredienteSearchRadio = screen.getByTestId(ingredientSearchRadioStrg);
     userEvent.click(ingredienteSearchRadio);
@@ -218,28 +196,28 @@ describe('Testa o componente Search Bar', () => {
     userEvent.click(execSearchBtn);
 
     const cardsImages = await screen.findAllByTestId(/-recipe-card/);
-    expect(cardsImages).toHaveLength(12);
+    waitFor(() => expect(cardsImages).toHaveLength(12));
   });
 
   it('Verifica se e exibida a mensagem de alerta caso não encontre nenhuma receita na tela de drinks', async () => {
     renderWithRouter(<App />, '/drinks');
 
-    const btnSearch = screen.getByTestId(SEARCH_TOP_BTN);
-    expect(btnSearch).toBeInTheDocument();
+    const btnSearch = screen.getByTestId(searchTopButtonStrg);
+    // expect(btnSearch).toBeInTheDocument();
     userEvent.click(btnSearch);
 
-    await waitFor(
-      () => expect(screen.getByText(/search/i)),
-    );
+    // await waitFor(
+    //   () => expect(screen.getByText(/search/i)),
+    // );
 
-    const inputSearch = screen.getByTestId(SEARCH_INPUT);
+    const inputSearch = screen.getByTestId(searchInputStrg);
     userEvent.type(inputSearch, 'xxxx');
 
-    const BtnRadioName = screen.getByTestId(NAME_SEARCH_RADIO);
+    const BtnRadioName = screen.getByTestId(nameSearchButtonStrg);
     userEvent.type(BtnRadioName, { target: { value: true } });
-    expect(BtnRadioName.value).toBe('name');
+    expect(BtnRadioName.value).toBe(/name/i);
 
-    const btnSearchRecipes = screen.getByTestId(EXEC_SEARCH_BTN);
+    const btnSearchRecipes = screen.getByTestId(execSearchBtnStrg);
     expect(btnSearchRecipes).toBeInTheDocument();
     userEvent.click(btnSearchRecipes);
 

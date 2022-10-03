@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
 
-describe('Testa a página de detalhes das receitas', () => {
+describe('Testa a página de detalhes da bebida', () => {
   it('Testa o botão de favoritar receita', async () => {
     renderWithRouter(<App />);
 

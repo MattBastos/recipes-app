@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
 
-describe('Testa a página de detalhes da comida', () => {
+describe('Testa a página de progresso da comida', () => {
   it('Testa o botão de favoritar receita', async () => {
     localStorage.clear();
 
@@ -22,6 +22,8 @@ describe('Testa a página de detalhes da comida', () => {
     await waitFor(() => {
       const mealCard0Principal = screen.getByTestId('0-recipe-card');
       userEvent.click(mealCard0Principal);
+      const startRecipeBtn = screen.getByTestId('start-recipe-btn');
+      userEvent.click(startRecipeBtn);
     });
 
     await waitFor(() => {
@@ -39,15 +41,32 @@ describe('Testa a página de detalhes da comida', () => {
     await waitFor(() => {
       const shareBtn = screen.getByTestId('share-btn');
       userEvent.click(shareBtn);
+      const copiedMsg = screen.getByText(/Link copied!/i);
+      expect(copiedMsg).toBeInTheDocument();
     });
   });
 
-  it('Testa se a lista de ingredientes é renderizada', async () => {
+  it('Testa se a lista de ingredientes está sendo renderizada', async () => {
     renderWithRouter(<App />);
 
     await waitFor(() => {
-      const ingredientList = screen.getAllByTestId(/0-ingredient-name-and-measure/i);
+      const ingredientList = screen.getAllByTestId(/0-ingredient-step/i);
+      userEvent.click(ingredientList[0]);
       expect(ingredientList).toHaveLength(2);
+    });
+  });
+
+  it('Testa se o ingrediente é armazenado no localStorage quando clicado', async () => {
+    localStorage.clear();
+
+    renderWithRouter(<App />);
+
+    await waitFor(() => {
+      const finishRecipeBtn = screen.getByTestId('finish-recipe-btn');
+      expect(finishRecipeBtn).toBeDisabled();
+
+      const ingredientList = screen.getAllByTestId(/0-ingredient-step/i);
+      ingredientList.forEach((ingredient) => userEvent.click(ingredient));
     });
   });
 });

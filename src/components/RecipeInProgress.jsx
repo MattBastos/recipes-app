@@ -106,7 +106,7 @@ function RecipeInProgress({ path, id, mealInfo, mealIngredientsAndMeasures,
         />
       </button>
       {copiedMsgVisibility && (
-        <div>Link copied!</div>
+        <p>Link copied!</p>
       )}
       <h1 data-testid="recipe-title">
         {mealInfo.strMeal}

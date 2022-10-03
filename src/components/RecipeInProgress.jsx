@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Ingredients from './Ingredients';
+import MealIngredients from './MealIngredients';
+import DrinkIngredients from './DrinkIngredients';
 import { favoriteMealCreator, favoriteDrinkCreator } from '../services/objCreator';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
@@ -77,10 +78,7 @@ function RecipeInProgress({ path, id, mealInfo, mealIngredientsAndMeasures,
         src={ mealInfo.strMealThumb }
         alt="Imagem da receita"
       />
-      <button
-        type="button"
-        onClick={ handleFavoriteMealBtn }
-      >
+      <button type="button" onClick={ handleFavoriteMealBtn }>
         {isFavorite ? (
           <img
             data-testid="favorite-btn"
@@ -92,22 +90,16 @@ function RecipeInProgress({ path, id, mealInfo, mealIngredientsAndMeasures,
               data-testid="favorite-btn"
               src={ whiteHeartIcon }
               alt="Favorite Button"
-            />
-          )}
+            />)}
       </button>
       <button
         data-testid="share-btn"
         type="button"
         onClick={ handleShareBtn }
       >
-        <img
-          src={ shareIcon }
-          alt="Share Button"
-        />
+        <img src={ shareIcon } alt="Share Button" />
       </button>
-      {copiedMsgVisibility && (
-        <p>Link copied!</p>
-      )}
+      {copiedMsgVisibility && (<p>Link copied!</p>)}
       <h1 data-testid="recipe-title">
         {mealInfo.strMeal}
       </h1>
@@ -119,21 +111,17 @@ function RecipeInProgress({ path, id, mealInfo, mealIngredientsAndMeasures,
       </p>
       <ul>
         {mealIngredientsAndMeasures.map((mealIngredient, i) => (
-          <Ingredients
+          <MealIngredients
             testId={ i }
             key={ i }
             ingredient={ mealIngredient }
             savedIngredients={ savedIngredients }
             setSavedIngredients={ setSavedIngredients }
             mealIngredientsAndMeasures={ mealIngredientsAndMeasures }
-            drinkIngredientsAndMeasures={ drinkIngredientsAndMeasures }
             setIsDisabled={ setIsDisabled }
-            path={ path }
-          />
-        ))}
+          />))}
       </ul>
-    </section>
-  );
+    </section>);
 
   const renderDrink = () => (
     <section>
@@ -142,10 +130,7 @@ function RecipeInProgress({ path, id, mealInfo, mealIngredientsAndMeasures,
         src={ drinkInfo.strDrinkThumb }
         alt="Imagem da receita"
       />
-      <button
-        type="button"
-        onClick={ handleFavoriteDrinkBtn }
-      >
+      <button type="button" onClick={ handleFavoriteDrinkBtn }>
         {isFavorite ? (
           <img
             data-testid="favorite-btn"
@@ -157,22 +142,16 @@ function RecipeInProgress({ path, id, mealInfo, mealIngredientsAndMeasures,
               data-testid="favorite-btn"
               src={ whiteHeartIcon }
               alt="Favorite Button"
-            />
-          )}
+            />)}
       </button>
       <button
         data-testid="share-btn"
         type="button"
         onClick={ handleShareBtn }
       >
-        <img
-          src={ shareIcon }
-          alt="Share Button"
-        />
+        <img src={ shareIcon } alt="Share Button" />
       </button>
-      {copiedMsgVisibility && (
-        <div>Link copied!</div>
-      )}
+      {copiedMsgVisibility && (<div>Link copied!</div>)}
       <h1 data-testid="recipe-title">
         {drinkInfo.strDrink}
       </h1>
@@ -184,15 +163,15 @@ function RecipeInProgress({ path, id, mealInfo, mealIngredientsAndMeasures,
       </p>
       <ul>
         {drinkIngredientsAndMeasures.map((drinkIngredient, i) => (
-          <Ingredients
+          <DrinkIngredients
             testId={ i }
             key={ i }
             ingredient={ drinkIngredient }
             savedIngredients={ savedIngredients }
             setSavedIngredients={ setSavedIngredients }
             setIsDisabledDrink={ setIsDisabledDrink }
-          />
-        ))}
+            drinkIngredientsAndMeasures={ drinkIngredientsAndMeasures }
+          />))}
       </ul>
     </section>
   );

@@ -3,10 +3,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
-import drinks from '../../cypress/mocks/drinks';
-import drinksByIngredient from '../../cypress/mocks/drinksByIngredient';
-import oneDrink from '../../cypress/mocks/oneDrink';
-// import oneDrinkId15997 from '../../cypress/mocks/oneDrinkId15997';
+import fetch from '../../cypress/mocks/fetch';
 
 const searchInputStrg = 'search-input';
 const ingredientSearchRadioStrg = 'ingredient-search-radio';
@@ -100,13 +97,9 @@ describe('Testa o componente Search Bar', () => {
 
     const execSearchBtn = screen.getByTestId(execSearchBtnStrg);
     userEvent.click(execSearchBtn);
-    const fetch = (url) => Promise.resolve({
-      status: 200,
-      ok: true,
-      json: () => {
-        if (url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=G') { return Promise.resolve(drinks); }
-      },
-    });
+
+    const FL_DRINK_URL = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=G';
+    fetch(FL_DRINK_URL);
     waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
   });
 
@@ -127,13 +120,9 @@ describe('Testa o componente Search Bar', () => {
 
     const execSearchBtn = screen.getByTestId(execSearchBtnStrg);
     userEvent.click(execSearchBtn);
-    const fetch = (url) => Promise.resolve({
-      status: 200,
-      ok: true,
-      json: () => {
-        if (url === 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=water') { return Promise.resolve(drinksByIngredient); }
-      },
-    });
+
+    const IN_DRINKS_URL = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list';
+    fetch(IN_DRINKS_URL);
     waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
   });
 
@@ -154,13 +143,10 @@ describe('Testa o componente Search Bar', () => {
 
     const execSearchBtn = screen.getByTestId(execSearchBtnStrg);
     userEvent.click(execSearchBtn);
-    const fetch = (url) => Promise.resolve({
-      status: 200,
-      ok: true,
-      json: () => {
-        if (url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=GG') { return Promise.resolve(drinks); }
-      },
-    });
+
+    const NAME_DRINK_URL = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=GG';
+
+    fetch(NAME_DRINK_URL);
     waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
   });
 
@@ -187,7 +173,6 @@ describe('Testa o componente Search Bar', () => {
   });
 
   it('Testa se o retorno for apenas uma receita, ela é renderizada na tela drinks', async () => {
-    // renderWithRouter(<App />, '/drinks');
     const { history } = renderWithRouter(<App />, '/drinks/178319');
 
     const drinkIcon = screen.getByTestId(drinkIconStrg);
@@ -197,7 +182,7 @@ describe('Testa o componente Search Bar', () => {
     userEvent.click(searchTopButton);
 
     const inputValueFilter = screen.getByTestId(searchInputStrg);
-    userEvent.type(inputValueFilter, '178319');
+    userEvent.type(inputValueFilter, 'Aquamarine');
 
     const nameSearchButton = screen.getByTestId(nameSearchButtonStrg);
     userEvent.click(nameSearchButton);
@@ -205,21 +190,35 @@ describe('Testa o componente Search Bar', () => {
     const execSearchBtn = screen.getByTestId(execSearchBtnStrg);
     userEvent.click(execSearchBtn);
 
-    const fetch = (url) => Promise.resolve({
-      status: 200,
-      ok: true,
-      json: () => {
-        if (
-          url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=Aquamarine'
-          || url === 'https://www.thecocktaildb.com/api/json/v1/1/random.php'
-          || url === 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=178319'
-        ) { return Promise.resolve(oneDrink); }
-      },
-    });
+    const ONE_RECIPE_URL = 'https:www.thecocktaildb.com/api/json/v1/1/search.php?s=Aquamarine';
+    fetch(ONE_RECIPE_URL);
+
     expect(fetch).toHaveBeenCalledTimes(1);
     await waitFor(() => {
       expect(history.location.pathname).toEqual('/drinks/178319');
-    }, { timeout: 2000 });
+    });
+  });
+
+  it('Testa se apenas 12 cards são renderizado na pagina drinks', async () => {
+    renderWithRouter(<App />, '/drinks');
+
+    const drinkIcon = screen.getByTestId(drinkIconStrg);
+    userEvent.click(drinkIcon);
+
+    const searchTopButton = screen.getByTestId(searchTopButtonStrg);
+    userEvent.click(searchTopButton);
+
+    const inputValueFilter = screen.getByTestId(searchInputStrg);
+    userEvent.type(inputValueFilter, 'Water');
+
+    const ingredienteSearchRadio = screen.getByTestId(ingredientSearchRadioStrg);
+    userEvent.click(ingredienteSearchRadio);
+
+    const execSearchBtn = screen.getByTestId(execSearchBtnStrg);
+    userEvent.click(execSearchBtn);
+
+    const cardsImages = await screen.findAllByTestId(/-recipe-card/);
+    expect(cardsImages).toHaveLength(12);
   });
 
   it('Verifica se e exibida a mensagem de alerta caso não encontre nenhuma receita na tela de drinks', async () => {

@@ -3,9 +3,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
-import meals from '../../cypress/mocks/meals';
-import oneMeal from '../../cypress/mocks/oneMeal';
-import mealIngredients from '../../cypress/mocks/mealIngredients';
+import fetch from '../../cypress/mocks/fetch';
 
 const searchInputStrg = 'search-input';
 const ingredientSearchRadioStrg = 'ingredient-search-radio';
@@ -92,13 +90,8 @@ describe('Testa o componente Search Bar', () => {
 
     const execSearchBtn = screen.getByTestId(execSearchBtnStrg);
     userEvent.click(execSearchBtn);
-    const fetch = (url) => Promise.resolve({
-      status: 200,
-      ok: true,
-      json: () => {
-        if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?f=C') { return Promise.resolve(meals); }
-      },
-    });
+    const FL_MEALS_URL = 'https://www.themealdb.com/api/json/v1/1/search.php?f=C';
+    fetch(FL_MEALS_URL);
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 
@@ -116,13 +109,8 @@ describe('Testa o componente Search Bar', () => {
 
     const execSearchBtn = screen.getByTestId(execSearchBtnStrg);
     userEvent.click(execSearchBtn);
-    const fetch = (url) => Promise.resolve({
-      status: 200,
-      ok: true,
-      json: () => {
-        if (url === 'https://www.themealdb.com/api/json/v1/1/list.php?i=list') { return Promise.resolve(mealIngredients); }
-      },
-    });
+    const IN_MEALS_URL = 'https://www.themealdb.com/api/json/v1/1/list.php?i=list';
+    fetch(IN_MEALS_URL);
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 
@@ -140,13 +128,9 @@ describe('Testa o componente Search Bar', () => {
 
     const execSearchBtn = screen.getByTestId(execSearchBtnStrg);
     userEvent.click(execSearchBtn);
-    const fetch = (url) => Promise.resolve({
-      status: 200,
-      ok: true,
-      json: () => {
-        if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=Corba') { return Promise.resolve(meals); }
-      },
-    });
+    const NAME_MEAL_URL = 'https://www.themealdb.com/api/json/v1/1/search.php?s=Corba';
+
+    fetch(NAME_MEAL_URL);
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 
@@ -163,18 +147,11 @@ describe('Testa o componente Search Bar', () => {
 
     const execSearchBtn = screen.getByTestId(execSearchBtnStrg);
     userEvent.click(execSearchBtn);
-    const fetch = (url) => Promise.resolve({
-      status: 200,
-      ok: true,
-      json: () => {
-        if (
-          url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata'
-          || url === 'https://www.themealdb.com/api/json/v1/1/random.php'
-          || url === 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=52771'
-          || url === 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=52977'
-        ) { return Promise.resolve(oneMeal); }
-      },
-    });
+
+    const ONE_RECIPE_MEAL_UR = 'https://www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata';
+
+    fetch(ONE_RECIPE_MEAL_UR);
+
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 

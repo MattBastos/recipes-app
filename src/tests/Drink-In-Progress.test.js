@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
 
-describe('Testa a página de progresso da comida', () => {
+describe('Testa a página de progresso da bebida', () => {
   it('Testa o botão de favoritar receita', async () => {
     localStorage.clear();
 
@@ -20,8 +20,14 @@ describe('Testa a página de progresso da comida', () => {
     userEvent.click(loginBtn);
 
     await waitFor(() => {
-      const mealCard0Principal = screen.getByTestId('0-recipe-card');
-      userEvent.click(mealCard0Principal);
+      const drinkIcon = screen.getByTestId(/drinks-bottom-btn/i);
+      userEvent.click(drinkIcon);
+
+      const drinkCard0Principal = screen.getByTestId('0-recipe-card');
+      userEvent.click(drinkCard0Principal);
+    });
+
+    await waitFor(() => {
       const startRecipeBtn = screen.getByTestId('start-recipe-btn');
       userEvent.click(startRecipeBtn);
     });
@@ -33,15 +39,6 @@ describe('Testa a página de progresso da comida', () => {
       userEvent.click(favoriteBtn);
       expect(getFavoriteRecipes).toHaveLength(1);
     });
-  });
-
-  it('Testa a imagem do botão de favoritar', async () => {
-    renderWithRouter(<App />);
-
-    const favoriteBtn = screen.getByTestId('favorite-btn');
-    expect(favoriteBtn).toHaveAttribute('src', 'whiteHeartIcon.svg');
-    userEvent.click(favoriteBtn);
-    expect(favoriteBtn).toHaveAttribute('src', 'blackHeartIcon.svg');
   });
 
   it('Testa o botão de compartilhar receita', async () => {
@@ -60,8 +57,7 @@ describe('Testa a página de progresso da comida', () => {
 
     await waitFor(() => {
       const ingredientList = screen.getAllByTestId(/0-ingredient-step/i);
-      userEvent.click(ingredientList[0]);
-      expect(ingredientList).toHaveLength(2);
+      expect(ingredientList).toHaveLength(1);
     });
 
     await waitFor(() => {
@@ -71,6 +67,8 @@ describe('Testa a página de progresso da comida', () => {
   });
 
   it('Testa se o ingrediente é armazenado no localStorage quando clicado', async () => {
+    localStorage.clear();
+
     renderWithRouter(<App />);
 
     const finishRecipeBtn = screen.getByTestId('finish-recipe-btn');

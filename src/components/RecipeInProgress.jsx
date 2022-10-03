@@ -18,7 +18,9 @@ function RecipeInProgress({ path, id, mealInfo, mealIngredientsAndMeasures,
 
   useEffect(() => {
     const getSavedIngredients = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    setSavedIngredients(getSavedIngredients);
+    if (getSavedIngredients !== null) {
+      setSavedIngredients(getSavedIngredients);
+    }
   }, []);
 
   useEffect(() => {

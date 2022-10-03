@@ -21,8 +21,8 @@ describe('Testa a página de detalhes da bebida', () => {
       const drinkIcon = screen.getByTestId(/drinks-bottom-btn/i);
       userEvent.click(drinkIcon);
 
-      const mealCard0Principal = screen.getByTestId('0-recipe-card');
-      userEvent.click(mealCard0Principal);
+      const drinkCard0Principal = screen.getByTestId('0-recipe-card');
+      userEvent.click(drinkCard0Principal);
     });
 
     await waitFor(() => {

@@ -40,9 +40,6 @@ function SearchBar({ pageTitle }) {
     if (recipes === null) {
       return global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
-    if (recipes === null) {
-      return global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    }
   };
 
   const feEmDeus = async (endPoint) => {

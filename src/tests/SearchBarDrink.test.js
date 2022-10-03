@@ -3,15 +3,10 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
-// import meals from '../../cypress/mocks/meals';
 import drinks from '../../cypress/mocks/drinks';
 import drinksByIngredient from '../../cypress/mocks/drinksByIngredient';
-// import oneMeal from '../../cypress/mocks/oneMeal';
-// import mealIngredients from '../../cypress/mocks/mealIngredients';
-// import oneDrinkId15997 from '../../cypress/mocks/oneDrinkId15997';
 import oneDrink from '../../cypress/mocks/oneDrink';
-// import fetch from '../../cypress/mocks/fetch';
-// import Drinks from '../pages/Drinks';
+// import oneDrinkId15997 from '../../cypress/mocks/oneDrinkId15997';
 
 const searchInputStrg = 'search-input';
 const ingredientSearchRadioStrg = 'ingredient-search-radio';
@@ -170,7 +165,7 @@ describe('Testa o componente Search Bar', () => {
   });
 
   it('Testa se apenas 12 cards são renderizado na pagina drinks', async () => {
-    renderWithRouter(<App />);
+    renderWithRouter(<App />, '/drinks');
 
     const drinkIcon = screen.getByTestId(drinkIconStrg);
     userEvent.click(drinkIcon);
@@ -189,6 +184,42 @@ describe('Testa o componente Search Bar', () => {
 
     const cardsImages = await screen.findAllByTestId(/-recipe-card/);
     waitFor(() => expect(cardsImages).toHaveLength(12));
+  });
+
+  it('Testa se o retorno for apenas uma receita, ela é renderizada na tela drinks', async () => {
+    // renderWithRouter(<App />, '/drinks');
+    const { history } = renderWithRouter(<App />, '/drinks/178319');
+
+    const drinkIcon = screen.getByTestId(drinkIconStrg);
+    userEvent.click(drinkIcon);
+
+    const searchTopButton = screen.getByTestId(searchTopButtonStrg);
+    userEvent.click(searchTopButton);
+
+    const inputValueFilter = screen.getByTestId(searchInputStrg);
+    userEvent.type(inputValueFilter, '178319');
+
+    const nameSearchButton = screen.getByTestId(nameSearchButtonStrg);
+    userEvent.click(nameSearchButton);
+
+    const execSearchBtn = screen.getByTestId(execSearchBtnStrg);
+    userEvent.click(execSearchBtn);
+
+    const fetch = (url) => Promise.resolve({
+      status: 200,
+      ok: true,
+      json: () => {
+        if (
+          url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=Aquamarine'
+          || url === 'https://www.thecocktaildb.com/api/json/v1/1/random.php'
+          || url === 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=178319'
+        ) { return Promise.resolve(oneDrink); }
+      },
+    });
+    expect(fetch).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(history.location.pathname).toEqual('/drinks/178319');
+    }, { timeout: 2000 });
   });
 
   it('Verifica se e exibida a mensagem de alerta caso não encontre nenhuma receita na tela de drinks', async () => {
@@ -217,134 +248,5 @@ describe('Testa o componente Search Bar', () => {
     await waitFor(
       () => expect(alertMock).toHaveBeenCalledTimes(1),
     );
-  });
-
-  // it('Testa se o retorno for apenas uma receita, ela é renderizada na tela drinks', () => {
-  //   renderWithRouter(<App />);
-  //   const emailInput = screen.getByTestId(emailInputStrg);
-  //   userEvent.type(emailInput, emailInputed);
-
-  //   const passwordInput = screen.getByTestId(passwordInputStrg);
-  //   userEvent.type(passwordInput, '1234567');
-
-  //   const loginBtn = screen.getByTestId(loginSubmitBtnStrg);
-  //   userEvent.click(loginBtn);
-
-  //   const drinkIcon = screen.getByTestId(drinkIconStrg);
-  //   userEvent.click(drinkIcon);
-
-  //   const searchTopButton = screen.getByTestId(searchTopButtonStrg);
-  //   userEvent.click(searchTopButton);
-
-  //   const inputValueFilter = screen.getByTestId(searchInputStrg);
-  //   userEvent.type(inputValueFilter, 'Aquamrine');
-
-  //   const nameSearchButton = screen.getByTestId(nameSearchButtonStrg);
-  //   userEvent.click(nameSearchButton);
-
-  //   const execSearchBtn = screen.getByTestId(execSearchBtnStrg);
-  //   userEvent.click(execSearchBtn);
-  //   const fetch = (url) => Promise.resolve({
-  //     status: 200,
-  //     ok: true,
-  //     json: () => {
-  //       if (
-  //         url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=Aquamarine'
-  //         || url === 'https://www.thecocktaildb.com/api/json/v1/1/random.php'
-  //         || url === 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=178319'
-  //       ) { return Promise.resolve(oneDrink); }
-  //     },
-  //   });
-  //   expect(fetch).toHaveBeenCalledTimes(1);
-  // });
-
-  // it('Testa se o retorno for apenas uma receita, ela é renderizada na tela drinks', async () => {
-  //   const fetch = (url) => Promise.resolve({
-  //     status: 200,
-  //     ok: true,
-  //     json: () => {
-  //       if (
-  //         url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=Aquamarine'
-  //       || url === 'https://www.thecocktaildb.com/api/json/v1/1/random.php'
-  //       || url === 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=178319'
-  //       ) { return Promise.resolve(oneDrink); }
-  //     },
-  //   });
-  //   const { history } = renderWithRouter(<App />, '/drinks/178319');
-  //   // renderWithRouter(<App />, '/drinks');
-
-  //   const emailInput = screen.getByTestId(emailInputStrg);
-  //   userEvent.type(emailInput, emailInputed);
-
-  //   const passwordInput = screen.getByTestId(passwordInputStrg);
-  //   userEvent.type(passwordInput, '1234567');
-
-  //   const loginBtn = screen.getByTestId(loginSubmitBtnStrg);
-  //   userEvent.click(loginBtn);
-
-  //   const drinkIcon = screen.getByTestId(drinkIconStrg);
-  //   userEvent.click(drinkIcon);
-
-  //   expect(screen.getByRole('heading', { name: /drinks/i })).toBeInTheDocument();
-  //   const searchTopButton = screen.getByTestId(searchTopButtonStrg);
-  //   userEvent.click(searchTopButton);
-
-  //   const inputValueFilter = screen.getByTestId(searchInputStrg);
-  //   userEvent.type(inputValueFilter, 'Aquamarine');
-
-  //   const nameSearchButton = screen.getByTestId(nameSearchButtonStrg);
-  //   userEvent.click(nameSearchButton);
-
-  //   const execSearchBtn = screen.getByTestId(execSearchBtnStrg);
-  //   userEvent.click(execSearchBtn);
-
-  //   await waitFor(() => {
-  //     // expect(history.location.pathname).toEqual('/drinks/178319');
-  //     // const bebidaX = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=Aquamarine';
-  //     // const fetchQualquer = await fetchDrink1(bebidaX);
-
-  //     // expect(fetch).toHaveBeenCalled();
-  //     // fetch(bebidaX);
-  //     // expect(fetchQualquer).toHaveBeenCalledTimes(1);
-  //     expect(history.location.pathname).toEqual('/drinks/178319');
-  //   });
-  // });
-
-  it('Testa se o retorno for apenas uma receita, ela é renderizada na tela drinks', () => {
-    renderWithRouter(<App />);
-    const { history } = renderWithRouter(<App />, '/drinks/178319');
-
-    const drinkIcon = screen.getByTestId(drinkIconStrg);
-    userEvent.click(drinkIcon);
-
-    const searchTopButton = screen.getByTestId(searchTopButtonStrg);
-    userEvent.click(searchTopButton);
-
-    const inputValueFilter = screen.getByTestId(searchInputStrg);
-    userEvent.type(inputValueFilter, 'Aquamarine');
-
-    const nameSearchButton = screen.getByTestId(nameSearchButtonStrg);
-    userEvent.click(nameSearchButton);
-
-    const execSearchBtn = screen.getByTestId(execSearchBtnStrg);
-    userEvent.click(execSearchBtn);
-
-    waitFor(() => {
-      // const { path: { path } } = history;
-      // expect(path).toEqual('/drinks/178319');
-    });
-    const fetch = (url) => Promise.resolve({
-      status: 200,
-      ok: true,
-      json: () => {
-        if (
-          url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=Aquamarine'
-          || url === 'https://www.thecocktaildb.com/api/json/v1/1/random.php'
-          || url === 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=178319'
-        ) { return Promise.resolve(oneDrink); }
-      },
-    });
-    expect(fetch).toHaveBeenCalledTimes(1);
-    expect(history.location.pathname).toEqual('/drinks/178319');
   });
 });

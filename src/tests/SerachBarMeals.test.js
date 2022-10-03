@@ -17,6 +17,10 @@ const emailInputStrg = 'email-input';
 const passwordInputStrg = 'password-input';
 const loginSubmitBtnStrg = 'login-submit-btn';
 const emailInputed = 'email@email.com';
+const SEARCH_TOP_BTN = 'search-top-btn';
+const SEARCH_INPUT = 'search-input';
+const NAME_SEARCH_RADIO = 'name-search-radio';
+const EXEC_SEARCH_BTN = 'exec-search-btn';
 
 describe('Testa o componente Search Bar', () => {
   it('Testa se o componente é renderizado na paǵina', () => {
@@ -175,7 +179,7 @@ describe('Testa o componente Search Bar', () => {
   });
 
   it('Testa se apenas 12 cards são renderizado na pagina meals', async () => {
-    renderWithRouter(<App />);
+    renderWithRouter(<App />, '/meals');
 
     const searchTopButton = screen.getByTestId(searchTopButtonStrg);
     userEvent.click(searchTopButton);
@@ -191,5 +195,33 @@ describe('Testa o componente Search Bar', () => {
 
     const cardsImages = await screen.findAllByTestId(/-recipe-card/);
     expect(cardsImages).toHaveLength(12);
+  });
+
+  it('Verifica se e exibida a mensagem de alerta caso não encontre nenhuma receita na tela de meals', async () => {
+    renderWithRouter(<App />, '/meals');
+
+    const btnSearch = screen.getByTestId(SEARCH_TOP_BTN);
+    expect(btnSearch).toBeInTheDocument();
+    userEvent.click(btnSearch);
+
+    await waitFor(
+      () => expect(screen.getByText(/search/i)),
+    );
+
+    const inputSearch = screen.getByTestId(SEARCH_INPUT);
+    userEvent.type(inputSearch, 'xxxx');
+
+    const BtnRadioName = screen.getByTestId(NAME_SEARCH_RADIO);
+    userEvent.type(BtnRadioName, { target: { value: true } });
+    expect(BtnRadioName.value).toBe('name');
+
+    const btnSearchRecipes = screen.getByTestId(EXEC_SEARCH_BTN);
+    expect(btnSearchRecipes).toBeInTheDocument();
+    userEvent.click(btnSearchRecipes);
+
+    const alertMock = jest.spyOn(window, 'alert').mockImplementation();
+    await waitFor(
+      () => expect(alertMock).toHaveBeenCalledTimes(1),
+    );
   });
 });

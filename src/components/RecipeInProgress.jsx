@@ -9,6 +9,8 @@ import shareIcon from '../images/shareIcon.svg';
 
 const copy = require('clipboard-copy');
 
+// test
+
 function RecipeInProgress({ path, id, mealInfo, mealIngredientsAndMeasures,
   drinkInfo, drinkIngredientsAndMeasures, setIsDisabled, setIsDisabledDrink }) {
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);

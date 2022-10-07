@@ -1,16 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { readLocalStorage } from '../services/localStorage';
 import '../styles/Profile.css';
 
 function ProfileButtons() {
-  const userEmail = readLocalStorage('user');
+  const [emailProfile, setEamilProfile] = useState('');
+
+  useEffect(() => {
+    if (!JSON.parse(localStorage.getItem('user'))) {
+      localStorage.setItem('user', JSON.stringify({
+        email: '',
+      }));
+    }
+    const { email } = readLocalStorage('user');
+    console.log(email, 'email');
+    setEamilProfile(email);
+  }, []);
 
   return (
     <div className="section-container">
       <div>
         <h3 data-testid="profile-email" className="email">
+<<<<<<< HEAD
           { userEmail.email }
+=======
+          {emailProfile}
+>>>>>>> 8e3913ca (resolvendo reqs pendentes)
         </h3>
       </div>
 

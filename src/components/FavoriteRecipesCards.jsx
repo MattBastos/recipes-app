@@ -81,7 +81,7 @@ function FavoriteRecipesCards() {
       </div>
 
       <div>
-        { render.map((favoriteRecipe, index) => (
+        { render !== null && render.map((favoriteRecipe, index) => (
           <div key={ index } className="card-container">
             <div>
               <button

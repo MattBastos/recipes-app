@@ -1,13 +1,60 @@
-# :construction: README customizado em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto no qual você pode customizar e reutilizar todas as vezes que for executar o trybe-publisher.
 
-Para deixá-lo com a sua cara, basta alterar o seguinte arquivo da sua máquina: ~/.student-repo-publisher/custom/_NEW_README.md
+# Recipes App
 
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+In this recipes app, i used, along with colleagues, the most modern within the React Ecosystem: Hooks and Context API!
+
+It is possible to: see, search, filter, favorite and follow the progress of preparing food and drink recipes!
+
+The database is 2 different APIs, one for food and one for drinks (TheMealDB & TheCockTailDB).
+
+The layout focuses on mobile devices, so all prototypes will be developed on smaller screens.
+
+## Stacks and Tools
+
+- Node
+- JavaScript
+- React
+- RTL (React Testing Library)
+- VsCode
+- Trello
+- Git & Github
+- Linux - Ubuntu
+
+## Running Locally
+
+Clone the project:
+
+```bash
+  git@github.com:MattBastos/recipes-app.git
+```
+
+Enter the project directory:
+
+```bash
+  cd recipes-app
+```
+
+Install dependencies:
+
+```bash
+  npm install
+```
+
+Start the Project:
+
+```bash
+  npm start
+```
+
+## Autores
+
+- [@MattBastos](https://www.github.com/MattBastos)
+- [@CaiooAzevedoo](https://github.com/CaiooAzevedoo)
+- [@Rafael-Souza-97](https://github.com/Rafael-Souza-97)
+- [@jotavebraga](https://github.com/jotavebraga)
+- [@GustavoRReis](https://github.com/GustavoRReis)
+
+
+## Referência
+
+ - [Trybe](https://www.betrybe.com/)

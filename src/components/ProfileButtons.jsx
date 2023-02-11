@@ -21,11 +21,7 @@ function ProfileButtons() {
     <div className="section-container">
       <div>
         <h3 data-testid="profile-email" className="email">
-<<<<<<< HEAD
-          { userEmail.email }
-=======
           {emailProfile}
->>>>>>> 8e3913ca (resolvendo reqs pendentes)
         </h3>
       </div>
 
